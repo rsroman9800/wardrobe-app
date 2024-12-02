@@ -1,19 +1,14 @@
-// components/ProtectedRoute.js
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import PropTypes from 'prop-types';
+'use client';
 
-/**
- * Protected route component that requires authentication
- * @param {Object} props
- * @param {React.ReactNode} props.children - Child components to render when authenticated
- */
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!loading && !user) {
       router.push('/');
     }
@@ -24,10 +19,6 @@ const ProtectedRoute = ({ children }) => {
   }
 
   return user ? <>{children}</> : null;
-};
-
-ProtectedRoute.propTypes = {
-  children: PropTypes.node.required
 };
 
 export default ProtectedRoute;

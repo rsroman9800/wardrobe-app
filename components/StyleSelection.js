@@ -1,36 +1,17 @@
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { useRouter } from 'next/navigation';
 
 const StyleSelection = () => {
   const [gender, setGender] = useState('');
   const [style, setStyle] = useState('');
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { user } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      // Save preferences to Firestore
-      await setDoc(doc(db, 'userPreferences', user.uid), {
-        gender,
-        style,
-        updatedAt: new Date().toISOString()
-      });
-
-      router.push('/recommendations');
-    } catch (error) {
-      console.error('Error saving preferences:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Save preferences logic here
+    router.push('/recommendations');
   };
 
   return (
@@ -76,9 +57,9 @@ const StyleSelection = () => {
             <Button 
               type="submit" 
               className="w-full"
-              disabled={!gender || !style || loading}
+              disabled={!gender || !style}
             >
-              {loading ? 'Saving...' : 'Continue to Recommendations'}
+              Continue to Recommendations
             </Button>
           </form>
         </CardContent>
