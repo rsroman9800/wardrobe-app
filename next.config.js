@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     domains: ['openweathermap.org'],
   },
+  output: 'standalone',
 }
 
 module.exports = nextConfig
