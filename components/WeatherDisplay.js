@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
 import { getUserLocation, getWeather, formatTemperature, formatDescription } from '@/lib/weather';
+import Image from 'next/image';
 
 const WeatherDisplay = ({ onWeatherUpdate }) => {
   const [weather, setWeather] = useState(null);
@@ -78,11 +79,14 @@ const WeatherDisplay = ({ onWeatherUpdate }) => {
             </div>
           </div>
           <div className="text-right">
-            <img 
-              src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-              alt={weather.description}
-              className="w-16 h-16"
-            />
+            <div className="relative w-16 h-16">
+              <Image 
+                src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                alt={weather.description}
+                fill
+                className="object-contain"
+              />
+            </div>
             <div className="text-sm text-gray-500">
               Humidity: {weather.humidity}%
             </div>

@@ -1,5 +1,7 @@
+// components/ui/avatar.js
 import React from 'react';
-import { cn } from "@/lib/utils"
+import Image from 'next/image';
+import { cn } from "@/lib/utils";
 
 const Avatar = React.forwardRef(({ className, src, alt, fallback, ...props }, ref) => (
   <div
@@ -11,27 +13,34 @@ const Avatar = React.forwardRef(({ className, src, alt, fallback, ...props }, re
     {...props}
   >
     {src ? (
-      <img
-        src={src}
-        alt={alt}
-        className="aspect-square h-full w-full"
-      />
+      <div className="relative w-full h-full">
+        <Image
+          src={src}
+          alt={alt || "Avatar"}
+          fill
+          className="object-cover"
+        />
+      </div>
     ) : (
       <div className="flex h-full w-full items-center justify-center bg-muted">
         {fallback}
       </div>
     )}
   </div>
-))
+));
 Avatar.displayName = "Avatar"
 
 const AvatarImage = React.forwardRef(({ className, ...props }, ref) => (
-  <img
-    ref={ref}
-    className={cn("aspect-square h-full w-full", className)}
-    {...props}
-  />
-))
+  <div className="relative w-full h-full">
+    <Image
+      ref={ref}
+      className={cn("object-cover", className)}
+      {...props}
+      alt={props.alt || "Avatar"}
+      fill
+    />
+  </div>
+));
 AvatarImage.displayName = "AvatarImage"
 
 const AvatarFallback = React.forwardRef(({ className, ...props }, ref) => (
@@ -43,7 +52,7 @@ const AvatarFallback = React.forwardRef(({ className, ...props }, ref) => (
     )}
     {...props}
   />
-))
+));
 AvatarFallback.displayName = "AvatarFallback"
 
 export { Avatar, AvatarImage, AvatarFallback }

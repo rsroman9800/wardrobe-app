@@ -174,7 +174,7 @@ const RecommendationsPage = () => {
     }
 
     initialize();
-  }, [user]);
+  }, [user, fetchOutfits]); // Add fetchOutfits to dependency array
 
   if (loading) {
     return (
@@ -260,7 +260,7 @@ const RecommendationsPage = () => {
                   ))
                 ) : (
                   <div className="text-center py-8 text-gray-500">
-                    No outfits yet. Click "Generate New Outfits" to get started!
+                    No outfits yet. Click &quot;Generate New Outfits&quot; to get started!
                   </div>
                 )}
               </div>
