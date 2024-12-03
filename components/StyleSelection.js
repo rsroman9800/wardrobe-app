@@ -68,10 +68,16 @@ const StyleSelection = () => {
                 className="w-full p-2 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Select style</option>
-                <option value="casual">Casual</option>
+                <option value="classic-casual">Classic Casual</option>
+                <option value="business-casual">Business Casual</option>
                 <option value="formal">Formal</option>
                 <option value="streetwear">Streetwear</option>
                 <option value="minimalist">Minimalist</option>
+                <option value="athletic">Athletic</option>
+                <option value="bohemian">Bohemian</option>
+                <option value="retro">Retro</option>
+                <option value="gothic">Gothic</option>
+                <option value="preppy">Preppy</option>
               </select>
             </div>
 
