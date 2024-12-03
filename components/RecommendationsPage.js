@@ -1,5 +1,6 @@
 // components/RecommendationsPage.js
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -40,6 +41,7 @@ const OutfitCard = ({ number, text }) => {
 };
 
 const RecommendationsPage = () => {
+  const router = useRouter();
   const [weather, setWeather] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [preferences, setPreferences] = useState(null);
@@ -107,19 +109,30 @@ const RecommendationsPage = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         <Card className="bg-white shadow-lg">
           <CardHeader className="border-b border-gray-200 bg-gray-50">
-            <CardTitle className="text-2xl font-bold text-gray-900">
-              Your Style Recommendations
-            </CardTitle>
-            {weather && (
-              <CardDescription className="text-gray-700 font-medium">
-                Current weather: {weather.temp}°C, {weather.description}
-              </CardDescription>
-            )}
-            {preferences && (
-              <CardDescription className="text-gray-700 font-medium">
-                Style: {preferences.style} | Gender: {preferences.gender}
-              </CardDescription>
-            )}
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle className="text-2xl font-bold text-gray-900">
+                  Your Style Recommendations
+                </CardTitle>
+                {weather && (
+                  <CardDescription className="text-gray-700 font-medium">
+                    Current weather: {weather.temp}°C, {weather.description}
+                  </CardDescription>
+                )}
+                {preferences && (
+                  <CardDescription className="text-gray-700 font-medium">
+                    Style: {preferences.style} | Gender: {preferences.gender}
+                  </CardDescription>
+                )}
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => router.push('/style-selection')}
+                className="bg-white hover:bg-gray-100 text-gray-700"
+              >
+                Change Style
+              </Button>
+            </div>
           </CardHeader>
           <CardContent className="p-6">
             {error ? (
@@ -135,22 +148,24 @@ const RecommendationsPage = () => {
                     text={item.text}
                   />
                 ))}
+                <div className="flex justify-end mt-6">
+                  <Button 
+                    onClick={fetchWeatherAndRecommendations}
+                    disabled={refreshing}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                  >
+                    {refreshing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Refreshing...
+                      </>
+                    ) : (
+                      'Refresh Recommendations'
+                    )}
+                  </Button>
+                </div>
               </div>
             )}
-            <Button 
-              onClick={fetchWeatherAndRecommendations}
-              disabled={refreshing}
-              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium"
-            >
-              {refreshing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Refreshing...
-                </>
-              ) : (
-                'Refresh Recommendations'
-              )}
-            </Button>
           </CardContent>
         </Card>
       </div>
