@@ -1,3 +1,4 @@
+// components/AuthPage.js
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,25 +34,27 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Welcome to StyleGuide</CardTitle>
-          <CardDescription>
+    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-white shadow-lg">
+        <CardHeader className="border-b border-gray-200 bg-gray-50">
+          <CardTitle className="text-2xl font-bold text-gray-900">
+            Welcome to StyleGuide
+          </CardTitle>
+          <CardDescription className="text-gray-700 font-medium">
             Get personalized clothing recommendations based on your style preferences and local weather.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="p-6 space-y-4">
           {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
+            <Alert variant="destructive" className="bg-red-50 border-red-200">
+              <AlertDescription className="text-red-800">{error}</AlertDescription>
             </Alert>
           )}
           
           <Button 
             onClick={handleGithubLogin}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2"
+            className="w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white"
           >
             <Github className="w-5 h-5" />
             {loading ? 'Signing in...' : 'Continue with GitHub'}

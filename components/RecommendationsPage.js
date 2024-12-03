@@ -11,30 +11,28 @@ import { getWeather, getUserLocation } from '@/lib/weather';
 import { generateRecommendations } from '@/lib/groq';
 
 const OutfitCard = ({ number, text }) => {
-  // Split the text into items and tip
   const [items, tip] = text.split(/Tip:/i);
   
-  // Convert items text into an array, filtering out empty lines
   const itemsList = items
     .split('\n')
     .map(item => item.trim())
     .filter(item => item.length > 0);
 
   return (
-    <div className="p-6 bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow">
-      <h3 className="text-lg font-semibold mb-3">Outfit {number}</h3>
+    <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <h3 className="text-xl font-semibold mb-3 text-gray-900">Outfit {number}</h3>
       <ul className="space-y-2 mb-4">
         {itemsList.map((item, index) => (
           <li key={index} className="flex items-start">
-            <span className="mr-2">•</span>
-            <span>{item.replace('•', '').trim()}</span>
+            <span className="mr-2 text-blue-600">•</span>
+            <span className="text-gray-700">{item.replace('•', '').trim()}</span>
           </li>
         ))}
       </ul>
       {tip && (
-        <div className="mt-4 pt-3 border-t">
-          <p className="text-sm font-medium text-gray-900">Styling Tip:</p>
-          <p className="text-sm text-gray-600">{tip.trim()}</p>
+        <div className="mt-4 pt-3 border-t border-gray-200">
+          <p className="text-base font-semibold text-gray-900">Styling Tip:</p>
+          <p className="text-gray-700">{tip.trim()}</p>
         </div>
       )}
     </div>
@@ -55,12 +53,10 @@ const RecommendationsPage = () => {
       setError(null);
       setRefreshing(true);
       
-      // Get location and weather
       const location = await getUserLocation();
       const weatherData = await getWeather(location.latitude, location.longitude);
       setWeather(weatherData);
 
-      // Generate new recommendations if we have preferences
       if (preferences) {
         const recommendationsData = await generateRecommendations(preferences, weatherData);
         setRecommendations(recommendationsData);
@@ -76,7 +72,6 @@ const RecommendationsPage = () => {
   useEffect(() => {
     async function initialize() {
       try {
-        // Get user preferences
         const prefsDoc = await getDoc(doc(db, 'userPreferences', user.uid));
         if (!prefsDoc.exists()) {
           setError('Please set your style preferences first');
@@ -87,7 +82,6 @@ const RecommendationsPage = () => {
         const prefsData = prefsDoc.data();
         setPreferences(prefsData);
 
-        // Get initial recommendations
         await fetchWeatherAndRecommendations();
       } catch (err) {
         setError('Error loading your recommendations');
@@ -102,33 +96,35 @@ const RecommendationsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-slate-100 p-4">
       <div className="max-w-4xl mx-auto space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Your Style Recommendations</CardTitle>
+        <Card className="bg-white shadow-lg">
+          <CardHeader className="border-b border-gray-200 bg-gray-50">
+            <CardTitle className="text-2xl font-bold text-gray-900">
+              Your Style Recommendations
+            </CardTitle>
             {weather && (
-              <CardDescription>
+              <CardDescription className="text-gray-700 font-medium">
                 Current weather: {weather.temp}°C, {weather.description}
               </CardDescription>
             )}
             {preferences && (
-              <CardDescription>
+              <CardDescription className="text-gray-700 font-medium">
                 Style: {preferences.style} | Gender: {preferences.gender}
               </CardDescription>
             )}
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             {error ? (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+              <Alert variant="destructive" className="bg-red-50 border-red-200">
+                <AlertDescription className="text-red-800">{error}</AlertDescription>
               </Alert>
             ) : (
               <div className="space-y-6">
@@ -144,7 +140,7 @@ const RecommendationsPage = () => {
             <Button 
               onClick={fetchWeatherAndRecommendations}
               disabled={refreshing}
-              className="mt-6"
+              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium"
             >
               {refreshing ? (
                 <>
