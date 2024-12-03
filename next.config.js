@@ -1,19 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    webpack: (config, { isServer }) => {
-      // Add the undici loader
-      config.module.rules.push({
-        test: /node_modules\/undici\/lib\/web\/fetch\/util\.js$/,
-        loader: 'string-replace-loader',
-        options: {
-          search: '#target',
-          replace: 'Symbol.iterator',
-          flags: 'g'
-        }
-      });
-  
-      return config;
-    }
-  }
-  
-  module.exports = nextConfig
+  reactStrictMode: true,
+  images: {
+    domains: ['openweathermap.org'],
+  },
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+    };
+    return config;
+  },
+}
+
+module.exports = nextConfig;
