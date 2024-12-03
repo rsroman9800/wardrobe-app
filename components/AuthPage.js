@@ -2,15 +2,22 @@
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Github } from 'lucide-react';
+import { Github, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { signInWithGithub } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const AuthPage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const checkUserPreferences = async (userId) => {
+    const prefsDoc = await getDoc(doc(db, 'userPreferences', userId));
+    return prefsDoc.exists();
+  };
 
   const handleGithubLogin = async () => {
     try {
@@ -24,10 +31,19 @@ const AuthPage = () => {
       }
 
       if (user) {
-        router.push('/style-selection');
+        // Check if user has existing preferences
+        const hasPreferences = await checkUserPreferences(user.uid);
+        
+        // Redirect based on whether preferences exist
+        if (hasPreferences) {
+          router.push('/recommendations');
+        } else {
+          router.push('/style-selection');
+        }
       }
     } catch (err) {
       setError('An unexpected error occurred');
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -56,8 +72,17 @@ const AuthPage = () => {
             disabled={loading}
             className="w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white"
           >
-            <Github className="w-5 h-5" />
-            {loading ? 'Signing in...' : 'Continue with GitHub'}
+            {loading ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              <>
+                <Github className="h-5 w-5" />
+                Continue with GitHub
+              </>
+            )}
           </Button>
         </CardContent>
       </Card>
